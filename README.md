@@ -6,6 +6,10 @@ As informações são de origem do "TheMovieDB - www.themoviedb.org"
 
 # Configuration
 
+Para buscar filmes famosos, será usada a API do themoviedb.org.
+Se ainda não possuir uma conta, você precisará [criar uma](https://www.themoviedb.org/?_dc=1539792338) , a fim de solicitar uma chave de API.
+
+De posse da API_KEY e só informar a mesma aqui no arquivo de properties do gradle [aqui](https://github.com/lnfjunior/iMovies/blob/760b24b78599e5ea9bd2301604ba0f7d12b59dca/gradle.properties#L16).
 
 
 # Prints
