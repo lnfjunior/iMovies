@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/not_connected_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:clickable="true"
+    android:focusable="true">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="@dimen/no_connection_image_width"
+        android:layout_height="@dimen/no_connection_image_width"
+        android:layout_above="@+id/empty_state_text_layout"
+        android:layout_centerHorizontal="true"
+        app:cardBackgroundColor="@color/colorPrimary"
+        app:cardCornerRadius="44dp"
+        app:cardElevation="0dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            tools:ignore="UselessLeaf" />
+
+        <ImageView
+            android:id="@+id/not_connected_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/app_no_connection"
+            app:srcCompat="@drawable/ic_signal_wifi_off_white_24dp" />
+    </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/empty_state_text_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/not_connected_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/app_no_connection"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/refresh_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/colorAccent"
+            android:maxWidth="200dp"
+            android:text="@string/app_button_refresh"
+            android:textColor="@color/primaryLightColor"
+            tools:ignore="UnusedAttribute" />
+    </LinearLayout>
+</RelativeLayout>

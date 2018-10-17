@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">iMovies</string>
+    <string name="app_version">Versão:</string>
+    <string name="app_image_poster">Imagem do poster do filme</string>
+    <string name="app_description_imagem_logo">Logo do iMovies</string>
+    <string name="app_button_refresh">Tentar novamente</string>
+    <string name="app_no_connection">Sem conexão</string>
+    <string name="app_no_connection_snackbar">Verifique sua conexão e tente novamente.</string>
+    <string name="app_about_text">iMovies é um catálogo de filmes onde exibe diversas informações
+        sobre e os filmes, mostrando um resumo, trailers,
+        análises d críticos de cinema entre outras informações.\n\nAs informações são de origem do "TheMovieDB - www.themoviedb.org"</string>
+    <string name="title_popular">Mais populares</string>
+    <string name="title_top_rated">Mais votados</string>
+    <string name="title_now_playing">Em cartaz</string>
+    <string name="title_up_coming">Próximos em cartaz</string>
+    <string name="title_more">Mais</string>
+    <string name="title_item_about">Sobre o aplicativo</string>
+    <string name="app_drawer_open">Abrir a navegação</string>
+    <string name="app_drawer_close">Fechar a navegação</string>
+    <string name="app_title">Título</string>
+    <string name="app_overview">Resumo</string>
+    <string name="app_videos">Trailers</string>
+    <string name="app_reviews">Comentários</string>
+    <string name="app_genres">Gênero</string>
+    <string name="app_runtime">Duração</string>
+    <string name="app_runtime_scale">minutos</string>
+    <string name="app_vote_average">Média em 5 estrelas</string>
+    <string name="app_vote_count">Votos</string>
+    <string name="app_release_date">Lançamento</string>
+    <string name="app_no_register">Sem registro</string>
+    <string name="app_description_image_poster">Cartaz do filme</string>
+</resources>

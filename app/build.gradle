@@ -1,0 +1,100 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "br.com.inaconsultoria.imovies"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    buildTypes.each {
+        it.buildConfigField('String', 'API_KEY_THEMOVIE_DB', '"'+ApiKeyTheMovieDB+'"')
+    }
+
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:design:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:support-vector-drawable:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:animated-vector-drawable:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:gridlayout-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support.constraint:constraint-layout:$rootProject.supportConstraintLayoutVersion"
+
+    // font
+    implementation "uk.co.chrisjenx:calligraphy:$rootProject.calligraphyVersion"
+
+    // image
+    implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
+    implementation "com.squareup.picasso:picasso:$rootProject.picassoVersion"
+
+    // parser
+    implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
+    implementation 'com.uncopt:android.justified:1.0'
+    implementation 'org.parceler:parceler-api:1.1.9'
+    annotationProcessor 'org.parceler:parceler:1.1.9'
+
+    // dependency injection
+    implementation "com.google.dagger:dagger:$rootProject.dagger2Version"
+    annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.dagger2Version"
+    compileOnly 'javax.annotation:jsr250-api:1.0'
+    implementation 'javax.inject:javax.inject:1'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+
+    // code generator for view
+    implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
+    implementation 'com.github.pedrovgs:renderers:3.3.3'
+
+    // swipe view
+    implementation "com.mindorks:placeholderview:$rootProject.placeholderviewVersion"
+
+    // logger
+    implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
+
+    // dependencies for local unit tests
+    testImplementation "junit:junit:$rootProject.ext.junitVersion"
+    testImplementation "org.mockito:mockito-core:$rootProject.mockitoVersion"
+    testAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.dagger2Version"
+
+    // UI Testing
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
+    androidTestImplementation "com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion"
+    androidTestImplementation "org.mockito:mockito-core:$rootProject.mockitoVersion"
+    androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.dagger2Version"
+
+    //Nav dependencies
+    implementation "android.arch.navigation:navigation-fragment:$rootProject.navVersion"
+    implementation "android.arch.navigation:navigation-ui:$rootProject.navVersion"
+    androidTestImplementation "android.arch.navigation:navigation-testing:$rootProject.navVersion"
+
+    // splash loading wave loadins
+    implementation "com.race604.waveloading:library:$rootProject.waveloadingVersion"
+}
+
+configurations.all {
+    resolutionStrategy.force "com.android.support:support-annotations:$supportLibraryVersion"
+}

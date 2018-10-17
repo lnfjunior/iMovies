@@ -1,0 +1,29 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <dimen name="main_item_list_poster_heigth">230dp</dimen>
+
+    <dimen name="detail_background_toobar_height">350dp</dimen>
+    <dimen name="detail_poster_width">190dp</dimen>
+    <dimen name="detail_poster_heigth">270dp</dimen>
+    <dimen name="detail_margin_between_texts">16dp</dimen>
+    <dimen name="detail_space_around_card">16dp</dimen>
+    <dimen name="detail_margim_top_poster">32dp</dimen>
+    <dimen name="detail_margim_top_card_details">64dp</dimen>
+    <dimen name="detail_margim_bottom_poster_deatils">16dp</dimen>
+    <dimen name="detail_elevation_poster_card">16dp</dimen>
+    <dimen name="detail_min_heigth_card">300dp</dimen>
+    <dimen name="detail_margin_top_progress_loading">32dp</dimen>
+    <dimen name="detail_size_text_titles">12sp</dimen>
+    <dimen name="detail_size_text_content">18sp</dimen>
+
+    <dimen name="border_radios_cards_and_images">8dp</dimen>
+    <dimen name="border_radios_cards_and_bar">3dp</dimen>
+    <dimen name="trailer_width">120dp</dimen>
+    <dimen name="trailer_height">80dp</dimen>
+    <dimen name="no_connection_image_width">100dp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+</resources>
