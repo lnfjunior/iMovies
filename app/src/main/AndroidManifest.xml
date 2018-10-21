@@ -19,6 +19,7 @@
         <activity
             android:name=".ui.splash.SplashActivity"
             android:launchMode="singleTop"
+            android:noHistory="true"
             android:theme="@style/AppThemeFullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

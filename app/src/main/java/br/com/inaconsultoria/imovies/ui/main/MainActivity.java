@@ -116,6 +116,11 @@ public class MainActivity extends BaseActivity<MainContractView>
 	}
 
 	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+	}
+
+	@Override
 	public void onResume() {
 		super.onResume();
 		if (!App.getInstance().isLoadData()) {
