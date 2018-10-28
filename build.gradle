@@ -47,6 +47,8 @@ ext {
     butterKnifeVersion = '8.8.1'
     placeholderviewVersion = '0.6.1'
     timberVersion = '4.5.1'
+    rxjava2Version = '2.0.6'
+    rxandroidVersion = '2.0.2'
 
     //Test dependencies
     junitVersion = '4.12'
