@@ -41,6 +41,7 @@ import br.com.inaconsultoria.imovies.utils.Constants;
 import butterknife.BindString;
 import butterknife.BindView;
 
+import static br.com.inaconsultoria.imovies.utils.Constants.FAVORITES;
 import static br.com.inaconsultoria.imovies.utils.Constants.NOW_PLAYING;
 import static br.com.inaconsultoria.imovies.utils.Constants.POPULAR;
 import static br.com.inaconsultoria.imovies.utils.Constants.TOP_RATED;
@@ -73,6 +74,8 @@ public class MainActivity extends BaseActivity<MainContractView>
     String mTitleNowPlaying;
 	@BindString(R.string.title_up_coming)
     String mTitleUpComing;
+	@BindString(R.string.title_favorite)
+	String mTitleFavorite;
 	@BindString(R.string.app_image_poster)
     String mSharedPoster;
 
@@ -177,6 +180,11 @@ public class MainActivity extends BaseActivity<MainContractView>
                 mLastFilter = UP_COMING;
                 mLastTitle = mTitleUpComing;
                 mPresenter.getMovies(mLastFilter);
+				break;
+			case R.id.filter_favorite:
+				mLastFilter = FAVORITES;
+				mLastTitle = mTitleFavorite;
+				mPresenter.getMovies(mLastFilter);
 				break;
             case R.id.nav_about:
                 openAbout();

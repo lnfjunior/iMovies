@@ -41,4 +41,8 @@ public class App extends Application {
         this.mLoadData = mLoadData;
     }
 
+    public static Context getAppContext() {
+        return mInstance.getApplicationContext();
+    }
+
 }

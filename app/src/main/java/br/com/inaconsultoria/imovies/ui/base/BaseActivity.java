@@ -1,8 +1,11 @@
 package br.com.inaconsultoria.imovies.ui.base;
 
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import br.com.inaconsultoria.imovies.R;
 import br.com.inaconsultoria.imovies.ui.component.ProgressDialog;
@@ -26,7 +30,9 @@ import butterknife.ButterKnife;
 @SuppressWarnings({"deprecation", "unchecked"})
 public abstract class BaseActivity<T extends BaseView> extends AppCompatActivity {
 
-	private View snackbarLayout;
+    private RelativeLayout notConnectedLayout;
+
+    private View snackbarLayout;
 	private Dialog loadingDialog;
 	private BasePresenter<T> basePresenter;
 
@@ -40,6 +46,7 @@ public abstract class BaseActivity<T extends BaseView> extends AppCompatActivity
 		setContentView(R.layout.activity_base_layout);
 
 		configureLayout();
+		configureNotConnectedLayout();
 		configureSnackbarLayout();
 		createLoadingDialog();
 		onActivityCreate(savedInstanceState);
@@ -74,8 +81,12 @@ public abstract class BaseActivity<T extends BaseView> extends AppCompatActivity
 		ButterKnife.bind(this, inflatedLayout);
 	}
 
-	private void configureSnackbarLayout() {
-		this.snackbarLayout = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0); // Get the view group of the activity
+    private void configureNotConnectedLayout() {
+        notConnectedLayout = findViewById(R.id.not_connected_layout);
+    }
+
+    private void configureSnackbarLayout() {
+		this.snackbarLayout = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
 	}
 
 	private void createLoadingDialog() {
@@ -91,6 +102,10 @@ public abstract class BaseActivity<T extends BaseView> extends AppCompatActivity
 		snackbar.show();
 	}
 
+	public void showToastMessage(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+	}
+
 	public void showLoading() {
 		this.loadingDialog.show();
 	}
@@ -103,7 +118,24 @@ public abstract class BaseActivity<T extends BaseView> extends AppCompatActivity
 	    startActivity(new Intent(this, ConnectionActivity.class));
 	}
 
-	public Context getCurrentContext() {
-		return this;
-	}
+    @TargetApi(Build.VERSION_CODES.M)
+    public void requestPermissionsSafely(String[] permissions, int requestCode) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(permissions, requestCode);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public boolean hasPermission(String permission) {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
+                checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void hideNotConnectedLayout() {
+        notConnectedLayout.setVisibility(View.GONE);
+    }
+
+    public Context getCurrentContext() {
+        return this;
+    }
 }

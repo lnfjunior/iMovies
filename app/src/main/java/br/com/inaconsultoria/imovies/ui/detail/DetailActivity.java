@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -81,6 +84,7 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 	private int mIdMovie;
 	private Movies mMovie;
 	private DetailPresenter mPresenter;
+	private MenuItem menuItemFavorite;
 	private RVRendererAdapter<VideosResults> mTrailersAdapter;
 	private ListAdapteeCollection<VideosResults> mTrailersAdapteeColletion = new ListAdapteeCollection<>();
 	private RVRendererAdapter<ReviewsResults> mReviewsAdapter;
@@ -123,6 +127,30 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 
 		hideLoading();
 
+		boolean status = mPresenter.getMovieFromLocal(mIdMovie);
+		updateIconFavorite(status);
+
+
+	}
+
+	@Override
+	public void updateIconFavorite(boolean status) {
+		if (menuItemFavorite != null) {
+			if (!status) {
+				menuItemFavorite.setIcon(R.drawable.ic_favorite_border_white_24dp);
+			} else {
+				menuItemFavorite.setIcon(R.drawable.ic_favorite_white_24dp);
+			}
+		}
+	}
+
+	@Override
+	public void showMessageFavorite(boolean status) {
+		if (!status) {
+			showSnackbar(getResources().getString(R.string.app_message_removed_favorite));
+		} else {
+			showSnackbar(getResources().getString(R.string.app_message_added_favorite));
+		}
 	}
 
 	@Override
@@ -131,6 +159,31 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 		savedInstanceState.putParcelable(Constants.INSTANCE_STATE_MOVIE, Parcels.wrap(mMovie));
 		super.onSaveInstanceState(savedInstanceState);
 	}
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_detail, menu);
+        menuItemFavorite = menu.getItem(0);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        boolean aux = true;
+
+        if (id == R.id.detail_favorite) {
+            if (mMovie != null)
+                favoriteMovie();
+        } else if (id == R.id.detail_share) {
+            shareMovie();
+        } else {
+            aux = super.onOptionsItemSelected(item);
+        }
+
+        return aux;
+    }
 
 	@Override
 	public void showLoading() {
@@ -187,6 +240,10 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 		startActivity(intent);
 	}
 
+	private void favoriteMovie() {
+		mPresenter.saveOrRemoveFavorite(mMovie);
+	}
+
 	private void configTollbar() {
 		setSupportActionBar(mToolbar);
 		setTitle("");
@@ -206,6 +263,18 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 		setActivityPresenter(mPresenter);
 	}
 
+	private void shareMovie() {
+		Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.putExtra(
+				Intent.EXTRA_TEXT,
+				String.format(Constants.URL_THE_MOVIE_DB_SHARE, mMovie.getId())
+		);
+		intent.setType("text/plain");
+
+		if (intent.resolveActivity(getPackageManager()) != null) {
+			startActivity(intent);
+		}
+	}
 	public String getAllGenres(List<Genres> genres) {
 		StringBuilder names = new StringBuilder();
 

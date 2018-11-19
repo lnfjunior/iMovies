@@ -13,6 +13,7 @@ public interface Constants {
     String TOP_RATED = "TOP_RATED";
     String NOW_PLAYING = "NOW_PLAYING";
     String UP_COMING = "UP_COMING";
+    String FAVORITES = "FAVORITES";
     int TWO_COLUMNS = 2;
     int THREE_COLUMNS = 3;
 

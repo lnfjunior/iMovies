@@ -1,5 +1,9 @@
 package br.com.inaconsultoria.imovies.data.repository.movies;
 
+import android.content.Context;
+
+import java.util.List;
+
 import br.com.inaconsultoria.imovies.data.model.Movies;
 import br.com.inaconsultoria.imovies.data.model.ResponseMoviesList;
 import br.com.inaconsultoria.imovies.utils.RequestCallback;
@@ -20,5 +24,7 @@ public interface MoviesRepository {
 	void getMoviesUpComing(RequestCallback<ResponseMoviesList> callback);
 
 	void getMovieById(Integer id, RequestCallback<Movies> callback);
+
+	void getMovieFromSqLite(Context contect, RequestCallback<List<Movies>> callback);
 
 }
