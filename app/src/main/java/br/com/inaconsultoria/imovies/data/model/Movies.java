@@ -59,12 +59,13 @@ public class Movies {
 	public Movies() {
 	}
 
-	public Movies(int id, String title, String releaseDate, double voteAverage, String posterPath) {
+	public Movies(int id, String title, String releaseDate, double voteAverage, String posterPath, String backdropPath) {
 		this.id = id;
 		this.title = title;
 		this.releaseDate = releaseDate;
 		this.voteAverage = voteAverage;
 		this.posterPath = posterPath;
+		this.backdropPath = backdropPath;
 	}
 
 	public Integer getId() {

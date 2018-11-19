@@ -12,5 +12,8 @@ import br.com.inaconsultoria.imovies.ui.base.BaseView;
 public interface DetailContractView extends BaseView {
 
     void setMovie(Movies movies);
+    void updateIconFavorite(boolean status);
+    void showMessageFavorite(boolean status);
+
 
 }

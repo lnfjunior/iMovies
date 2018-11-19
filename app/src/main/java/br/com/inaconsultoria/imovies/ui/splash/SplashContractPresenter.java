@@ -11,6 +11,6 @@ import br.com.inaconsultoria.imovies.ui.base.BaseView;
  * All rights reserved 2018.
  */
 @PerActivity
-public interface SplashContractPresenter extends BaseView {
+public interface SplashContractPresenter {
 
 }

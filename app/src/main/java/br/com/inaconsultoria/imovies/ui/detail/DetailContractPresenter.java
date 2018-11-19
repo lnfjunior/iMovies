@@ -2,6 +2,7 @@
 package br.com.inaconsultoria.imovies.ui.detail;
 
 
+import br.com.inaconsultoria.imovies.data.model.Movies;
 import br.com.inaconsultoria.imovies.di.PerActivity;
 import br.com.inaconsultoria.imovies.ui.base.BaseView;
 
@@ -11,7 +12,9 @@ import br.com.inaconsultoria.imovies.ui.base.BaseView;
  * All rights reserved 2018.
  */
 @PerActivity
-public interface DetailContractPresenter extends BaseView {
+public interface DetailContractPresenter {
 
     void getMovie(int id);
+    boolean getMovieFromLocal(Integer id);
+    void saveOrRemoveFavorite(Movies movie);
 }

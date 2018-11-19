@@ -1,7 +1,12 @@
 package br.com.inaconsultoria.imovies.ui.detail;
 
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import br.com.inaconsultoria.imovies.data.db.MoviesDbContract;
 import br.com.inaconsultoria.imovies.data.model.Movies;
 import br.com.inaconsultoria.imovies.data.repository.movies.MoviesRepository;
 import br.com.inaconsultoria.imovies.ui.base.BasePresenter;
@@ -45,24 +50,55 @@ public class DetailPresenter extends BasePresenter<DetailContractView>
 		}));
 	}
 
+	@SuppressLint("Recycle")
 	@Override
-	public void showSnackbar(String message) {
+	public boolean getMovieFromLocal(Integer id) {
+		Cursor mCursor;
+		mCursor = mView.getCurrentContext().getContentResolver()
+				.query(MoviesDbContract.MoviesEntry.CONTENT_URI,
+						null,
+						String.format("%s=?", MoviesDbContract.MoviesEntry.COLUMN_ID),
+						new String[]{String.valueOf(id)},
+						null);
 
+		return (mCursor != null ? mCursor.getCount() : 0) != 0;
 	}
 
+	@SuppressLint("Recycle")
 	@Override
-	public void showLoading() {
+	public void saveOrRemoveFavorite(Movies movie) {
+		Cursor mCursor;
+		mCursor = mView.getCurrentContext().getContentResolver()
+				.query(MoviesDbContract.MoviesEntry.CONTENT_URI,
+						null,
+						String.format("%s=?", MoviesDbContract.MoviesEntry.COLUMN_ID),
+						new String[]{String.valueOf(movie.getId())},
+						null);
 
+		if ((mCursor != null ? mCursor.getCount() : 0) == 0) {
+
+			ContentValues contentValues = new ContentValues();
+			contentValues.put(MoviesDbContract.MoviesEntry.COLUMN_ID, movie.getId());
+			contentValues.put(MoviesDbContract.MoviesEntry.COLUMN_TITLE, movie.getTitle());
+			contentValues.put(MoviesDbContract.MoviesEntry.COLUMN_RELEASE_DATE, movie.getReleaseDate());
+			contentValues.put(MoviesDbContract.MoviesEntry.COLUMN_VOTE_AVERAGE, movie.getVoteAverage());
+			contentValues.put(MoviesDbContract.MoviesEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
+			contentValues.put(MoviesDbContract.MoviesEntry.COLUMN_BACKDROP_PATH, movie.getBackdropPath());
+
+			mView.getCurrentContext().getContentResolver().insert(
+					MoviesDbContract.MoviesEntry.CONTENT_URI,
+					contentValues);
+			mView.updateIconFavorite(true);
+			mView.showMessageFavorite(true);
+
+		} else {
+
+			Uri uri = MoviesDbContract.MoviesEntry.CONTENT_URI;
+			uri = uri.buildUpon().appendPath(String.valueOf(movie.getId())).build();
+			mView.getCurrentContext().getContentResolver().delete(uri, null, null);
+			mView.updateIconFavorite(false);
+			mView.showMessageFavorite(false);
+
+		}
 	}
-
-	@Override
-	public void hideLoading() {
-
-	}
-
-	@Override
-	public void showNotConnectedLayout() {
-
-	}
-
 }

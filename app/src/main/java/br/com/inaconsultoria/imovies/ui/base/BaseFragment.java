@@ -39,6 +39,13 @@ public abstract class BaseFragment extends Fragment implements BaseView {
 	}
 
 	@Override
+	public void showToastMessage(String message) {
+		if (getActivity() != null) {
+			((BaseActivity) getActivity()).showToastMessage(message);
+		}
+	}
+
+	@Override
 	public void showSnackbar(String message) {
 		if (getActivity() != null) {
 			((BaseActivity) getActivity()).showSnackbar(message);
