@@ -119,11 +119,6 @@ public class MainActivity extends BaseActivity<MainContractView>
 	}
 
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-	}
-
-	@Override
 	public void onResume() {
 		super.onResume();
 		if (!App.getInstance().isLoadData()) {
@@ -223,9 +218,9 @@ public class MainActivity extends BaseActivity<MainContractView>
 	public void openDetailActivity(Movies movie, ImageView poster) {
         if (App.getInstance().isOnline()) {
             Intent intent = new Intent(getCurrentContext(), DetailActivity.class);
-            intent.putExtra(Constants.INSTANCE_STATE_ID_MOVIE, movie.getId());
-            intent.putExtra(Constants.INSTANCE_STATE_POSTER_MOVIE, movie.getPosterPath());
-            intent.putExtra(Constants.INSTANCE_STATE_BACKDROP_MOVIE, movie.getBackdropPath());
+            intent.putExtra(Constants.INSTANCE_STATE_MOVIE, Parcels.wrap(movie));
+//            intent.putExtra(Constants.INSTANCE_STATE_POSTER_MOVIE, movie.getPosterPath());
+//            intent.putExtra(Constants.INSTANCE_STATE_BACKDROP_MOVIE, movie.getBackdropPath());
 
             ViewCompat.setTransitionName(poster, mSharedPoster);
 

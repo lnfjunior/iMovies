@@ -8,7 +8,7 @@ import br.com.inaconsultoria.imovies.data.model.Movies;
 import br.com.inaconsultoria.imovies.data.model.ResponseMoviesList;
 import br.com.inaconsultoria.imovies.data.repository.movies.MoviesRepository;
 import br.com.inaconsultoria.imovies.ui.base.BasePresenter;
-import br.com.inaconsultoria.imovies.utils.RequestCallback;
+import br.com.inaconsultoria.imovies.data.api.RequestCallback;
 
 import static br.com.inaconsultoria.imovies.utils.Constants.FAVORITES;
 import static br.com.inaconsultoria.imovies.utils.Constants.NOW_PLAYING;

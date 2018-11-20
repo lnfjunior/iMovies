@@ -1,4 +1,4 @@
-package br.com.inaconsultoria.imovies.utils;
+package br.com.inaconsultoria.imovies.data.api;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -14,6 +14,8 @@ import retrofit2.Response;
  */
 public abstract class RequestCallback<T> implements Callback<T> {
 
+	private static final String LOG_TAG = RequestCallback.class.getName();
+
 	public abstract void onRequestResponse(T responseObject);
 
 	public abstract void onRequestError(String error);
@@ -25,7 +27,7 @@ public abstract class RequestCallback<T> implements Callback<T> {
 			onRequestResponse((T) response.body());
 		} else {
 
-			Log.e("ERROR RESPONSE FROM API", String.valueOf(response.code()));
+			Log.e(LOG_TAG, String.valueOf(response.code()));
 			onFailure(call, new Exception(response.message()));
 		}
 	}

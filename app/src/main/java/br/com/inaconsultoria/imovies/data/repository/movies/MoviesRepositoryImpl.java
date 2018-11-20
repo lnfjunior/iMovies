@@ -14,7 +14,7 @@ import br.com.inaconsultoria.imovies.data.db.MoviesDbContract;
 import br.com.inaconsultoria.imovies.data.model.Movies;
 import br.com.inaconsultoria.imovies.data.model.ResponseMoviesList;
 import br.com.inaconsultoria.imovies.utils.Constants;
-import br.com.inaconsultoria.imovies.utils.RequestCallback;
+import br.com.inaconsultoria.imovies.data.api.RequestCallback;
 
 /**
  * iMovies

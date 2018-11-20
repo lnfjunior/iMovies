@@ -81,7 +81,7 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 	@BindString(R.string.app_no_register)
 	String mNoRegister;
 
-	private int mIdMovie;
+//	private int mIdMovie;
 	private Movies mMovie;
 	private DetailPresenter mPresenter;
 	private MenuItem menuItemFavorite;
@@ -97,18 +97,18 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 
 	@Override
 	protected void onActivityCreate(Bundle savedInstanceState) {
-		initAnimations();
-		configTollbar();
 		configPresenter();
-		configRecycleView();
+        if (savedInstanceState != null) {
+            setMovie(Parcels.unwrap(savedInstanceState.getParcelable(Constants.INSTANCE_STATE_MOVIE)));
+        } else {
+            mMovie = Parcels.unwrap(getIntent().getParcelableExtra(Constants.INSTANCE_STATE_MOVIE));
+            refreshMovie();
+        }
+        initAnimations();
+        configTollbar();
+        configRecycleView();
 
-		if (savedInstanceState != null) {
-			mIdMovie = savedInstanceState.getInt(Constants.INSTANCE_STATE_ID_MOVIE);
-			setMovie(Parcels.unwrap(savedInstanceState.getParcelable(Constants.INSTANCE_STATE_MOVIE)));
-		} else {
-			mIdMovie = getIntent().getIntExtra(Constants.INSTANCE_STATE_ID_MOVIE, 0);
-			refreshMovie();
-		}
+
 	}
 
 	@Override
@@ -127,8 +127,12 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 
 		hideLoading();
 
-		boolean status = mPresenter.getMovieFromLocal(mIdMovie);
-		updateIconFavorite(status);
+		try {
+            boolean status = mPresenter.getMovieFromLocal(mMovie.getId());
+            updateIconFavorite(status);
+        } catch (Exception e) {
+		    e.printStackTrace();
+        }
 
 
 	}
@@ -155,7 +159,6 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
-		savedInstanceState.putInt(Constants.INSTANCE_STATE_ID_MOVIE, mIdMovie);
 		savedInstanceState.putParcelable(Constants.INSTANCE_STATE_MOVIE, Parcels.wrap(mMovie));
 		super.onSaveInstanceState(savedInstanceState);
 	}
@@ -199,10 +202,10 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 
 	private void initAnimations() {
 		Picasso.with(getCurrentContext())
-				.load(String.format("%s%s", Constants.URL_POSTER_CLEAR, getIntent().getStringExtra(Constants.INSTANCE_STATE_POSTER_MOVIE)))
+				.load(String.format("%s%s", Constants.URL_POSTER_CLEAR, mMovie.getPosterPath()))
 				.into(mImagePoster);
 		Picasso.with(getCurrentContext())
-				.load(String.format("%s%s", Constants.URL_POSTER_CLEAR, getIntent().getStringExtra(Constants.INSTANCE_STATE_BACKDROP_MOVIE)))
+				.load(String.format("%s%s", Constants.URL_POSTER_CLEAR, mMovie.getBackdropPath()))
 				.into(mImageBackdropPath);
 	}
 
@@ -231,7 +234,13 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 	}
 
 	public void refreshMovie() {
-		mPresenter.getMovie(mIdMovie);
+	    try {
+            if (mMovie != null && mMovie.getId() != null) {
+                mPresenter.getMovie(mMovie.getId());
+            }
+        } catch (Exception e) {
+	        e.printStackTrace();
+        }
 	}
 
 	private void openTrailerInYoutube(String key) {
@@ -286,76 +295,118 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 	}
 
 	private void renderGenres() {
-		if (mMovie.getGenres() != null) {
-			mTextGenres.setText(String.format("%s", getAllGenres(mMovie.getGenres())));
-		} else {
-			mTextGenres.setText(mNoRegister);
+		try {
+			if (mMovie.getGenres() != null) {
+				mTextGenres.setText(String.format("%s", getAllGenres(mMovie.getGenres())));
+			} else {
+				mTextGenres.setText(mNoRegister);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	private void renderReleaseDate() {
-		if (mMovie.getReleaseDate() != null && !mMovie.getReleaseDate().equals("")) {
-			mTextReleaseDate.setText(String.format("%s", DateUtil.convert(mMovie.getReleaseDate())));
-		} else {
-			mTextReleaseDate.setText(mNoRegister);
+		try {
+			if (mMovie.getReleaseDate() != null && !mMovie.getReleaseDate().equals("")) {
+				mTextReleaseDate.setText(String.format("%s", DateUtil.convert(mMovie.getReleaseDate())));
+			} else {
+				mTextReleaseDate.setText(mNoRegister);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
 	}
 
 	private void renderTitle() {
-		if (mMovie.getTitle() != null && !mMovie.getTitle().equals("")) {
-			mTextTitle.setText(String.format("%s", mMovie.getTitle()));
-		} else {
-			mTextTitle.setText(mNoRegister);
+		try {
+			if (mMovie.getTitle() != null && !mMovie.getTitle().equals("")) {
+				mTextTitle.setText(String.format("%s", mMovie.getTitle()));
+			} else {
+				mTextTitle.setText(mNoRegister);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
 	}
 
 	private void renderVoteAverage() {
-		if (mMovie.getVoteAverage() != null && !mMovie.getVoteAverage().equals("")) {
-			mTextVoteAverage.setText(String.format("%s", String.valueOf((mMovie.getVoteAverage()) / 2 )));
-		} else {
-			mTextVoteAverage.setText(mNoRegister);
+		try {
+			if (mMovie.getVoteAverage() != null) {
+				mTextVoteAverage.setText(String.format("%s", String.valueOf((mMovie.getVoteAverage()) / 2 )));
+			} else {
+				mTextVoteAverage.setText(mNoRegister);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
 	}
 
 	private void renderRuntime() {
-		if (mMovie.getRuntime() != null && !mMovie.getRuntime().equals("")) {
-			mTextRuntime.setText(String.format("%s %s", mMovie.getRuntime(), getResources().getString(R.string.app_runtime_scale)));
-		} else {
-			mTextRuntime.setText(mNoRegister);
+		try {
+			if (mMovie.getRuntime() != null) {
+				mTextRuntime.setText(String.format("%s %s", mMovie.getRuntime(), getResources().getString(R.string.app_runtime_scale)));
+			} else {
+				mTextRuntime.setText(mNoRegister);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	private void renderVoteCount() {
-		if (mMovie.getVoteCount() != null && !mMovie.getVoteCount().equals("")) {
-			mTextVoteCount.setText(String.format("%s", mMovie.getVoteCount()));
-		} else {
-			mTextVoteCount.setText(mNoRegister);
+		try {
+			if (mMovie.getVoteCount() != null) {
+				mTextVoteCount.setText(String.format("%s", mMovie.getVoteCount()));
+			} else {
+				mTextVoteCount.setText(mNoRegister);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	private void renderOverview() {
-		if (mMovie.getOverview() != null && !mMovie.getOverview().equals("")) {
-			mTextOverview.setText(String.format("%s", mMovie.getOverview()));
-		} else {
-			mTextOverview.setText(mNoRegister);
+		try {
+			if (mMovie.getOverview() != null && !mMovie.getOverview().equals("")) {
+				mTextOverview.setText(String.format("%s", mMovie.getOverview()));
+			} else {
+				mTextOverview.setText(mNoRegister);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	public void renderTrailers() {
-		if (mMovie.getVideos().getResults().size() != 0) {
-			mTrailersAdapter.diffUpdate(mMovie.getVideos().getResults());
-		} else {
-			mTextLabelTrailers.setVisibility(View.GONE);
-			mRecyclerViewTrailer.setVisibility(View.GONE);
+		try {
+			if (mMovie.getVideos().getResults().size() != 0) {
+				mTrailersAdapter.diffUpdate(mMovie.getVideos().getResults());
+			} else {
+				mTextLabelTrailers.setVisibility(View.GONE);
+				mRecyclerViewTrailer.setVisibility(View.GONE);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	public void renderReviews() {
-		if (mMovie.getReviews().getResults().size() != 0) {
-			mReviewsAdapter.diffUpdate(mMovie.getReviews().getResults());
-		} else {
-			mTextLabelReviews.setVisibility(View.GONE);
-			mRecyclerViewReviews.setVisibility(View.GONE);
+		try {
+			if (mMovie.getReviews().getResults().size() != 0) {
+				mReviewsAdapter.diffUpdate(mMovie.getReviews().getResults());
+			} else {
+				mTextLabelReviews.setVisibility(View.GONE);
+				mRecyclerViewReviews.setVisibility(View.GONE);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

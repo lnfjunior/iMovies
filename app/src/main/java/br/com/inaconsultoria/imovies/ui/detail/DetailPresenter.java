@@ -10,7 +10,7 @@ import br.com.inaconsultoria.imovies.data.db.MoviesDbContract;
 import br.com.inaconsultoria.imovies.data.model.Movies;
 import br.com.inaconsultoria.imovies.data.repository.movies.MoviesRepository;
 import br.com.inaconsultoria.imovies.ui.base.BasePresenter;
-import br.com.inaconsultoria.imovies.utils.RequestCallback;
+import br.com.inaconsultoria.imovies.data.api.RequestCallback;
 
 /**
  * iMovies

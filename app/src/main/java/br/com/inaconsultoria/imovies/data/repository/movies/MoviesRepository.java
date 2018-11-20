@@ -6,7 +6,7 @@ import java.util.List;
 
 import br.com.inaconsultoria.imovies.data.model.Movies;
 import br.com.inaconsultoria.imovies.data.model.ResponseMoviesList;
-import br.com.inaconsultoria.imovies.utils.RequestCallback;
+import br.com.inaconsultoria.imovies.data.api.RequestCallback;
 
 /**
  * iMovies
