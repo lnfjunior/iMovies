@@ -1,13 +1,20 @@
 package br.com.inaconsultoria.imovies.data.repository.movies;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.com.inaconsultoria.imovies.BuildConfig;
+import br.com.inaconsultoria.imovies.R;
 import br.com.inaconsultoria.imovies.data.api.ApiConnection;
+import br.com.inaconsultoria.imovies.data.db.MoviesDbContract;
 import br.com.inaconsultoria.imovies.data.model.Movies;
 import br.com.inaconsultoria.imovies.data.model.ResponseMoviesList;
 import br.com.inaconsultoria.imovies.utils.Constants;
-import br.com.inaconsultoria.imovies.utils.RequestCallback;
+import br.com.inaconsultoria.imovies.data.api.RequestCallback;
 
 /**
  * iMovies
@@ -78,4 +85,41 @@ public class MoviesRepositoryImpl implements MoviesRepository {
 				.enqueue(callback);
 	}
 
+	@Override
+	public void getMovieFromSqLite(Context context, RequestCallback<List<Movies>> callback) {
+		Cursor mCursor;
+
+		try {
+			mCursor = context.getContentResolver()
+					.query(MoviesDbContract.MoviesEntry.CONTENT_URI,
+							null,
+							null,
+							null,
+							MoviesDbContract.MoviesEntry.COLUMN_TITLE);
+
+			List<Movies> moviesList = new ArrayList<>();
+			if (mCursor != null && mCursor.moveToFirst()) {
+				while (!mCursor.isAfterLast()) {
+
+					moviesList.add(new Movies(
+							mCursor.getInt(mCursor.getColumnIndex(MoviesDbContract.MoviesEntry.COLUMN_ID)),
+							mCursor.getString(mCursor.getColumnIndex(MoviesDbContract.MoviesEntry.COLUMN_TITLE)),
+							mCursor.getString(mCursor.getColumnIndex(MoviesDbContract.MoviesEntry.COLUMN_RELEASE_DATE)),
+							mCursor.getDouble(mCursor.getColumnIndex(MoviesDbContract.MoviesEntry.COLUMN_VOTE_AVERAGE)),
+							mCursor.getString(mCursor.getColumnIndex(MoviesDbContract.MoviesEntry.COLUMN_POSTER_PATH)),
+							mCursor.getString(mCursor.getColumnIndex(MoviesDbContract.MoviesEntry.COLUMN_BACKDROP_PATH))
+					));
+					mCursor.moveToNext();
+				}
+				mCursor.close();
+			}
+
+			// Carregado com sucesso
+			callback.onRequestResponse(moviesList);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			callback.onRequestError(context.getResources().getString(R.string.error_favorites));
+		}
+	}
 }

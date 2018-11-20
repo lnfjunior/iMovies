@@ -3,7 +3,6 @@ package br.com.inaconsultoria.imovies.ui.main;
 
 
 import br.com.inaconsultoria.imovies.di.PerActivity;
-import br.com.inaconsultoria.imovies.ui.base.BaseView;
 
 /**
  * iMovies
@@ -11,7 +10,7 @@ import br.com.inaconsultoria.imovies.ui.base.BaseView;
  * All rights reserved 2018.
  */
 @PerActivity
-public interface MainContractPresenter extends BaseView {
+public interface MainContractPresenter {
 
     void getMovies(String filter);
 }

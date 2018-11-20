@@ -39,6 +39,10 @@
         <activity
             android:name=".ui.about.AboutActivity"/>
 
+        <provider
+            android:name=".data.db.MoviesContentProvider"
+            android:authorities="br.com.inaconsultoria.imovies"
+            android:exported="false" />
     </application>
 
 

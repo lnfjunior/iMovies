@@ -53,7 +53,7 @@ public class AboutActivity extends BaseActivity {
 	}
 
     private void setUpVersion() {
-        String version = mTitleVersion + " " + BuildConfig.VERSION_NAME;
+        String version = String.format("%s  %s", mTitleVersion, BuildConfig.VERSION_NAME);
         mVersionTextView.setText(version);
     }
 

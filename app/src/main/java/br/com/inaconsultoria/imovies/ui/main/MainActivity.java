@@ -41,6 +41,7 @@ import br.com.inaconsultoria.imovies.utils.Constants;
 import butterknife.BindString;
 import butterknife.BindView;
 
+import static br.com.inaconsultoria.imovies.utils.Constants.FAVORITES;
 import static br.com.inaconsultoria.imovies.utils.Constants.NOW_PLAYING;
 import static br.com.inaconsultoria.imovies.utils.Constants.POPULAR;
 import static br.com.inaconsultoria.imovies.utils.Constants.TOP_RATED;
@@ -73,6 +74,8 @@ public class MainActivity extends BaseActivity<MainContractView>
     String mTitleNowPlaying;
 	@BindString(R.string.title_up_coming)
     String mTitleUpComing;
+	@BindString(R.string.title_favorite)
+	String mTitleFavorite;
 	@BindString(R.string.app_image_poster)
     String mSharedPoster;
 
@@ -113,11 +116,6 @@ public class MainActivity extends BaseActivity<MainContractView>
 			mRecyclerView.smoothScrollToPosition(0);
 			mMoviesAdapter.diffUpdate(this.mListMovies);
 		}
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
 	}
 
 	@Override
@@ -178,6 +176,11 @@ public class MainActivity extends BaseActivity<MainContractView>
                 mLastTitle = mTitleUpComing;
                 mPresenter.getMovies(mLastFilter);
 				break;
+			case R.id.filter_favorite:
+				mLastFilter = FAVORITES;
+				mLastTitle = mTitleFavorite;
+				mPresenter.getMovies(mLastFilter);
+				break;
             case R.id.nav_about:
                 openAbout();
                 break;
@@ -215,9 +218,9 @@ public class MainActivity extends BaseActivity<MainContractView>
 	public void openDetailActivity(Movies movie, ImageView poster) {
         if (App.getInstance().isOnline()) {
             Intent intent = new Intent(getCurrentContext(), DetailActivity.class);
-            intent.putExtra(Constants.INSTANCE_STATE_ID_MOVIE, movie.getId());
-            intent.putExtra(Constants.INSTANCE_STATE_POSTER_MOVIE, movie.getPosterPath());
-            intent.putExtra(Constants.INSTANCE_STATE_BACKDROP_MOVIE, movie.getBackdropPath());
+            intent.putExtra(Constants.INSTANCE_STATE_MOVIE, Parcels.wrap(movie));
+//            intent.putExtra(Constants.INSTANCE_STATE_POSTER_MOVIE, movie.getPosterPath());
+//            intent.putExtra(Constants.INSTANCE_STATE_BACKDROP_MOVIE, movie.getBackdropPath());
 
             ViewCompat.setTransitionName(poster, mSharedPoster);
 

@@ -1,5 +1,7 @@
 package br.com.inaconsultoria.imovies.ui.base;
 
+import android.content.Context;
+
 /**
  * iMovies
  * Created by Luiz Nogueira on 16/10/2018
@@ -7,8 +9,12 @@ package br.com.inaconsultoria.imovies.ui.base;
  */
 public interface BaseView {
 
+	void showToastMessage(String message);
 	void showSnackbar(String message);
 	void showLoading();
 	void hideLoading();
 	void showNotConnectedLayout();
+	void hideNotConnectedLayout();
+
+	Context getCurrentContext();
 }
