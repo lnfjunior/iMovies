@@ -34,7 +34,6 @@ public class ConnectionActivity extends BaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         if (App.getInstance().isOnline()) {
-            App.getInstance().setLoadData(false);
             this.finishActivity(getActivityLayout());
         } else {
             String mMessageNoConnectionSnackbar = getResources().getString(R.string.app_no_connection_snackbar);
@@ -45,7 +44,6 @@ public class ConnectionActivity extends BaseActivity {
     @OnClick(R.id.refresh_button)
     public void onRefreshNetwork() {
         if (App.getInstance().isOnline()) {
-            App.getInstance().setLoadData(false);
             finishActivity(getActivityLayout());
         } else {
             String mMessageNoConnectionSnackbar = getResources().getString(R.string.app_no_connection_snackbar);

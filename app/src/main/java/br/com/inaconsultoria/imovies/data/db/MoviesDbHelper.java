@@ -24,7 +24,7 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
 				MoviesDbContract.MoviesEntry.COLUMN_VOTE_AVERAGE + " NUMERIC NOT NULL, " +
 				MoviesDbContract.MoviesEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL, " +
 				MoviesDbContract.MoviesEntry.COLUMN_BACKDROP_PATH + " TEXT, " +
-				MoviesDbContract.MoviesEntry.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
+				MoviesDbContract.MoviesEntry.COLUMN_TIMESTAMP + "TIME TIMESTAMP DEFAULT (strftime('%s', 'now'))" +
 				"); ";
 
 		sqLiteDatabase.execSQL(SQL_CREATE_MOVIES_FAVORITES_TABLE);

@@ -16,6 +16,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -29,7 +31,6 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.inaconsultoria.imovies.App;
 import br.com.inaconsultoria.imovies.R;
 import br.com.inaconsultoria.imovies.data.model.Movies;
 import br.com.inaconsultoria.imovies.data.repository.movies.MoviesRepositoryImpl;
@@ -108,7 +109,6 @@ public class MainActivity extends BaseActivity<MainContractView>
 		setTitle(mLastTitle);
 		this.mListMovies = movies;
 
-        App.getInstance().setLoadData(movies.size() > 0);
 		if (movies.size() == 0) {
 			mSwipeRefreshLayout.setVisibility(View.GONE);
 		} else {
@@ -121,9 +121,9 @@ public class MainActivity extends BaseActivity<MainContractView>
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (!App.getInstance().isLoadData()) {
-		    refreshMovies();
-        }
+		if (mLastFilter.equals(FAVORITES)) {
+			refreshMovies();
+		}
 	}
 
 	@Override
@@ -216,18 +216,16 @@ public class MainActivity extends BaseActivity<MainContractView>
 
 	@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
 	public void openDetailActivity(Movies movie, ImageView poster) {
-        if (App.getInstance().isOnline()) {
-            Intent intent = new Intent(getCurrentContext(), DetailActivity.class);
-            intent.putExtra(Constants.INSTANCE_STATE_MOVIE, Parcels.wrap(movie));
-//            intent.putExtra(Constants.INSTANCE_STATE_POSTER_MOVIE, movie.getPosterPath());
-//            intent.putExtra(Constants.INSTANCE_STATE_BACKDROP_MOVIE, movie.getBackdropPath());
+		Intent intent = new Intent(getCurrentContext(), DetailActivity.class);
+		intent.putExtra(Constants.SAVED_INSTANCE_STATE_ID_MOVIE, movie.getId());
+		intent.putExtra(Constants.SAVED_INSTANCE_STATE_POSTER_MOVIE, movie.getPosterPath());
+		intent.putExtra(Constants.SAVED_INSTANCE_STATE_BACKDROP_MOVIE, movie.getBackdropPath());
 
-            ViewCompat.setTransitionName(poster, mSharedPoster);
+		ViewCompat.setTransitionName(poster, mSharedPoster);
 
-            ActivityOptionsCompat options = ActivityOptionsCompat.
-                    makeSceneTransitionAnimation(this, poster, mSharedPoster);
-            startActivity(intent, options.toBundle());
-        }
+		ActivityOptionsCompat options = ActivityOptionsCompat.
+				makeSceneTransitionAnimation(this, poster, mSharedPoster);
+		startActivity(intent, options.toBundle());
 	}
 
 	private void setUpTollbar() {
@@ -256,8 +254,8 @@ public class MainActivity extends BaseActivity<MainContractView>
 	}
 
 	private void setUpRecycleView() {
-		int orientation = getResources().getConfiguration().orientation;
-		final GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2 * orientation);
+		int posterWidth = Constants.POSTER_WIDTH;
+		GridLayoutManager gridLayoutManager = new GridLayoutManager(this, calculateBestSpanCount(posterWidth));
 
 		mRecyclerView.setLayoutManager(gridLayoutManager);
 
@@ -277,6 +275,14 @@ public class MainActivity extends BaseActivity<MainContractView>
 			mLastTitle = mTitlePopular;
 			refreshMovies();
 		}
+	}
+
+	private int calculateBestSpanCount(int posterWidth) {
+		Display display = getWindowManager().getDefaultDisplay();
+		DisplayMetrics outMetrics = new DisplayMetrics();
+		display.getMetrics(outMetrics);
+		float screenWidth = outMetrics.widthPixels;
+		return Math.round(screenWidth / posterWidth);
 	}
 
 	private void setUpSwipeRefresh() {

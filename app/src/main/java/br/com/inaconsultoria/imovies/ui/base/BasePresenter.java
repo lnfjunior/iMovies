@@ -48,7 +48,6 @@ public class BasePresenter<V extends BaseView> {
 	protected void doOnApiCallFailure(OnApiCallFailure onApiCallFailure) {
 		if (isViewAttached()) return;
 		this.mView.hideLoading();
-        App.getInstance().setLoadData(false);
         onApiCallFailure.doOnFailure();
 	}
 

@@ -81,10 +81,11 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 	@BindString(R.string.app_no_register)
 	String mNoRegister;
 
-//	private int mIdMovie;
+	private boolean mStatusFromLocal;
+    private int idMovie;
 	private Movies mMovie;
 	private DetailPresenter mPresenter;
-	private MenuItem menuItemFavorite;
+	private MenuItem mMenuItemFavorite;
 	private RVRendererAdapter<VideosResults> mTrailersAdapter;
 	private ListAdapteeCollection<VideosResults> mTrailersAdapteeColletion = new ListAdapteeCollection<>();
 	private RVRendererAdapter<ReviewsResults> mReviewsAdapter;
@@ -97,17 +98,18 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 
 	@Override
 	protected void onActivityCreate(Bundle savedInstanceState) {
-		configPresenter();
-        if (savedInstanceState != null) {
-            setMovie(Parcels.unwrap(savedInstanceState.getParcelable(Constants.INSTANCE_STATE_MOVIE)));
-        } else {
-            mMovie = Parcels.unwrap(getIntent().getParcelableExtra(Constants.INSTANCE_STATE_MOVIE));
-            refreshMovie();
-        }
         initAnimations();
         configTollbar();
+        configPresenter();
         configRecycleView();
 
+        if (savedInstanceState != null) {
+            idMovie = savedInstanceState.getInt(Constants.SAVED_INSTANCE_STATE_ID_MOVIE);
+            setMovie(Parcels.unwrap(savedInstanceState.getParcelable(Constants.INSTANCE_STATE_MOVIE)));
+        } else {
+            idMovie = getIntent().getIntExtra(Constants.SAVED_INSTANCE_STATE_ID_MOVIE, 0);
+            refreshMovie();
+        }
 
 	}
 
@@ -139,11 +141,11 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 
 	@Override
 	public void updateIconFavorite(boolean status) {
-		if (menuItemFavorite != null) {
+		if (mMenuItemFavorite != null) {
 			if (!status) {
-				menuItemFavorite.setIcon(R.drawable.ic_favorite_border_white_24dp);
+				mMenuItemFavorite.setIcon(R.drawable.ic_favorite_border_white_24dp);
 			} else {
-				menuItemFavorite.setIcon(R.drawable.ic_favorite_white_24dp);
+				mMenuItemFavorite.setIcon(R.drawable.ic_favorite_white_24dp);
 			}
 		}
 	}
@@ -159,15 +161,25 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putInt(Constants.SAVED_INSTANCE_STATE_ID_MOVIE, idMovie);
+		savedInstanceState.putBoolean(Constants.INSTANCE_STATUS_FAVORITE_FROM_LOCAL, mStatusFromLocal);
 		savedInstanceState.putParcelable(Constants.INSTANCE_STATE_MOVIE, Parcels.wrap(mMovie));
 		super.onSaveInstanceState(savedInstanceState);
 	}
 
-    @Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+
+		 mStatusFromLocal = savedInstanceState.getBoolean(Constants.INSTANCE_STATUS_FAVORITE_FROM_LOCAL);
+		 setMovie(Parcels.unwrap(savedInstanceState.getParcelable(Constants.INSTANCE_STATE_MOVIE)));
+	}
+
+
+	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_detail, menu);
-        menuItemFavorite = menu.getItem(0);
+        mMenuItemFavorite = menu.getItem(0);
         return true;
     }
 
@@ -202,10 +214,10 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 
 	private void initAnimations() {
 		Picasso.with(getCurrentContext())
-				.load(String.format("%s%s", Constants.URL_POSTER_CLEAR, mMovie.getPosterPath()))
+				.load(String.format("%s%s", Constants.URL_POSTER_CLEAR, getIntent().getStringExtra(Constants.SAVED_INSTANCE_STATE_POSTER_MOVIE)))
 				.into(mImagePoster);
 		Picasso.with(getCurrentContext())
-				.load(String.format("%s%s", Constants.URL_POSTER_CLEAR, mMovie.getBackdropPath()))
+				.load(String.format("%s%s", Constants.URL_POSTER_CLEAR, getIntent().getStringExtra(Constants.SAVED_INSTANCE_STATE_BACKDROP_MOVIE)))
 				.into(mImageBackdropPath);
 	}
 
@@ -234,13 +246,7 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 	}
 
 	public void refreshMovie() {
-	    try {
-            if (mMovie != null && mMovie.getId() != null) {
-                mPresenter.getMovie(mMovie.getId());
-            }
-        } catch (Exception e) {
-	        e.printStackTrace();
-        }
+        mPresenter.getMovie(idMovie);
 	}
 
 	private void openTrailerInYoutube(String key) {
@@ -270,6 +276,9 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 				MoviesRepositoryImpl.getInstance()
 		);
 		setActivityPresenter(mPresenter);
+		initAnimations();
+		configTollbar();
+		configRecycleView();
 	}
 
 	private void shareMovie() {
