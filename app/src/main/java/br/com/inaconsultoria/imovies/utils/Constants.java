@@ -26,6 +26,7 @@ public interface Constants {
     String SAVED_INSTANCE_STATE_BACKDROP_MOVIE = "backdrop";
     String INSTANCE_STATE_MOVIE = "movie";
     String INSTANCE_STATUS_FAVORITE_FROM_LOCAL = "FAVORITE_FROM_LOCAL";
+    String INSTANCE_MENU_ITEM_ID = "MENU_ITEM_ID";
 
     int POSTER_WIDTH = 500;
 

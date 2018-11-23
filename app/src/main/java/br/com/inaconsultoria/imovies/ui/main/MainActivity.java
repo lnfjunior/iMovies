@@ -101,7 +101,15 @@ public class MainActivity extends BaseActivity<MainContractView>
 
 	@Override
 	protected void onActivityCreate(Bundle savedInstanceState) {
-	    setUp(savedInstanceState);
+		setUpTollbar();
+		setUpDrawer();
+		setUpPresenter();
+		setUpSwipeRefresh();
+		setUpRecycleView();
+
+		verifySavedInstanceState(savedInstanceState);
+
+		setTitle(mLastTitle);
 	}
 
 	@Override
@@ -292,19 +300,6 @@ public class MainActivity extends BaseActivity<MainContractView>
 	public void refreshMovies() {
 		mPresenter.getMovies(mLastFilter);
 	}
-
-	private void setUp(Bundle instance) {
-        setUpTollbar();
-        setUpDrawer();
-        setUpPresenter();
-        setUpSwipeRefresh();
-        setUpRecycleView();
-
-        verifySavedInstanceState(instance);
-
-        setTitle(mLastTitle);
-
-    }
 
     public void openAbout() {
         Intent intent = new Intent(this, AboutActivity.class);

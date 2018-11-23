@@ -83,6 +83,7 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 
 	private boolean mStatusFromLocal;
     private int idMovie;
+    private int idMenu = 0;
 	private Movies mMovie;
 	private DetailPresenter mPresenter;
 	private MenuItem mMenuItemFavorite;
@@ -105,10 +106,12 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 
         if (savedInstanceState != null) {
             idMovie = savedInstanceState.getInt(Constants.SAVED_INSTANCE_STATE_ID_MOVIE);
+			idMenu = savedInstanceState.getInt(Constants.INSTANCE_MENU_ITEM_ID, 0);
+			mStatusFromLocal = savedInstanceState.getBoolean(Constants.INSTANCE_STATUS_FAVORITE_FROM_LOCAL, false);
             setMovie(Parcels.unwrap(savedInstanceState.getParcelable(Constants.INSTANCE_STATE_MOVIE)));
         } else {
             idMovie = getIntent().getIntExtra(Constants.SAVED_INSTANCE_STATE_ID_MOVIE, 0);
-            refreshMovie();
+            refreshMovie(idMovie);
         }
 
 	}
@@ -129,18 +132,13 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 
 		hideLoading();
 
-		try {
-            boolean status = mPresenter.getMovieFromLocal(mMovie.getId());
-            updateIconFavorite(status);
-        } catch (Exception e) {
-		    e.printStackTrace();
-        }
 
 
 	}
 
 	@Override
 	public void updateIconFavorite(boolean status) {
+        mStatusFromLocal = status;
 		if (mMenuItemFavorite != null) {
 			if (!status) {
 				mMenuItemFavorite.setIcon(R.drawable.ic_favorite_border_white_24dp);
@@ -163,23 +161,33 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 	public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putInt(Constants.SAVED_INSTANCE_STATE_ID_MOVIE, idMovie);
 		savedInstanceState.putBoolean(Constants.INSTANCE_STATUS_FAVORITE_FROM_LOCAL, mStatusFromLocal);
+		savedInstanceState.putInt(Constants.INSTANCE_MENU_ITEM_ID, idMenu);
 		savedInstanceState.putParcelable(Constants.INSTANCE_STATE_MOVIE, Parcels.wrap(mMovie));
 		super.onSaveInstanceState(savedInstanceState);
 	}
 
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
-
 		 mStatusFromLocal = savedInstanceState.getBoolean(Constants.INSTANCE_STATUS_FAVORITE_FROM_LOCAL);
+		 idMenu = savedInstanceState.getInt(Constants.INSTANCE_MENU_ITEM_ID);
 		 setMovie(Parcels.unwrap(savedInstanceState.getParcelable(Constants.INSTANCE_STATE_MOVIE)));
 	}
 
 
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        boolean status;
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_detail, menu);
-        mMenuItemFavorite = menu.getItem(0);
+        if (idMenu == 0){
+            mMenuItemFavorite = menu.getItem(idMenu);
+            status = mPresenter.getMovieFromLocal(idMovie);
+            updateIconFavorite(status);
+            return true;
+        }
+        mMenuItemFavorite = menu.findItem(idMenu);
+        status = mPresenter.getMovieFromLocal(idMovie);
+        updateIconFavorite(status);
         return true;
     }
 
@@ -190,8 +198,10 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 
         if (id == R.id.detail_favorite) {
             if (mMovie != null)
+                idMenu = id;
                 favoriteMovie();
         } else if (id == R.id.detail_share) {
+            idMenu = id;
             shareMovie();
         } else {
             aux = super.onOptionsItemSelected(item);
@@ -245,7 +255,7 @@ public class DetailActivity extends BaseActivity<DetailContractView> implements 
 		mRecyclerViewReviews.setAdapter(mReviewsAdapter);
 	}
 
-	public void refreshMovie() {
+	public void refreshMovie(int idMovie) {
         mPresenter.getMovie(idMovie);
 	}
 
